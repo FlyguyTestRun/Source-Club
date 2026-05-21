@@ -43,16 +43,17 @@ The brief says *”a rough working thing beats a beautiful description.”* That
 - **Assignments 2 and 3** are concise decision documents — enough to act on, not padded
 - The architecture reflects what I’d actually build, including honest notes on what this POC skips and why
 
-**On the stack:** Everything here is free and open-source — pandas, RapidFuzz, Streamlit, n8n. Tools a small team can actually run and maintain.
+**On the existing stack:** I noted that Source Club already uses **Base86** (AI-driven product matching) and **ZenOne** (procurement platform, 200K+ normalized SKUs). The savings analysis POC replicates Base86’s core matching capability with open-source tools for the purpose of this demo — the production version would integrate with ZenOne and Base86 directly rather than replacing them.
 
-**On the production vision:** The right long-term architecture for product matching at scale is a knowledge graph with Graph RAG — dental supply items as nodes, semantic edges across supplier naming conventions, continuous learning from confirmed matches. That’s a multi-week build. This POC demonstrates the concept and gets the job done today.
+**On the production vision:** The full automation is a workflow wrapper: prospect submits purchase history via form → pipeline feeds it into Base86/ZenOne → formatted savings report goes back to the prospect automatically, no founder time required. The three-pass matching pipeline in this POC demonstrates the logic and data flow.
 
 ---
 
 ## Assumptions Made
 
-- Prospect purchase history arrives as a CSV (the most common export format from dental practice management software)
-- Source Club’s catalog is relatively stable, so a static CSV or periodic refresh works for the POC
+- Prospect purchase history arrives as CSV or Excel export from their dental supplier (Benco, Patterson, Henry Schein)
+- Source Club’s catalog data lives in ZenOne; static CSV used here as a stand-in
 - “Annual quantity” in the prospect file = actual purchasing frequency, not a one-time order
-- The Stripe + HubSpot naming mismatch problem is solved with a one-time reconciliation script + indexed `stripe_customer_id` property going forward
-- Project prioritization is based on context in the job description and case study brief; I’d refine rankings with 30 minutes of conversation about current ARR, churn rate, and team bandwidth
+- The Stripe + HubSpot naming mismatch is solved with a one-time reconciliation script + indexed `stripe_customer_id` custom property going forward
+- The n8n integration (Assignment 2) can be extended to sync ZenOne and Base86 member data into HubSpot — not just billing
+- Project prioritization is based on the case study brief context; I’d refine rankings with 30 min of conversation about current ARR, churn rate, and team bandwidth

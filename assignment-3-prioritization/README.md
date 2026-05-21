@@ -22,10 +22,12 @@ This is the primary conversion tool. Every new member goes through a savings ana
 **Operational Leverage: Highest**
 5–7 hours of skilled founder time → ~15 minutes of review on uncertain matches. That reclaimed time goes directly back into sales conversations and member success.
 
+**An important nuance on the tech:** Source Club already partners with **Base86** (AI product matching) and **ZenOne** (procurement platform with 200K+ normalized SKUs). These are the right production-scale tools for matching. The automation work here is not rebuilding what Base86 does — it's building the **workflow wrapper** around it: the intake form, the pipeline that feeds prospect data into Base86/ZenOne, and the formatted savings report that comes out the other end. That's a much faster build than it looks on paper.
+
 **Sequencing: None blocked by this; everything accelerates after**
 Nothing needs to exist before this gets built. And once it's built, the team can run 2–3× as many analyses without adding headcount.
 
-**Estimate:** 2–3 weeks to production-ready POC, 4–6 weeks with full automation (form-triggered, email delivery)
+**Estimate:** 1–2 weeks to production-ready automation using existing ZenOne/Base86 integrations; faster than building matching from scratch
 
 ---
 

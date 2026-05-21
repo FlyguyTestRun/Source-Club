@@ -8,44 +8,66 @@ The core challenge: dental suppliers use completely inconsistent product naming,
 
 ---
 
+## Existing Tech Stack Context
+
+Source Club already partners with two platforms that are directly relevant here:
+
+| Platform | Role | How It Fits |
+|----------|------|-------------|
+| **ZenOne** | Procurement platform — 200K+ normalized SKUs, multi-supplier price comparison, CSV export | The **catalog source of truth**. Production version of this tool pulls pricing directly from ZenOne rather than a static CSV |
+| **Base86** | AI-driven product matching — semantic equivalency across supplier catalogs | The **matching engine** at production scale. This POC replicates Base86's core capability using open-source tools (Claude + RapidFuzz) so it can be evaluated and iterated on independently |
+
+**Why build a POC when Base86 exists?**
+Base86 is an enterprise platform designed for broad procurement use cases. What Source Club needs is a **purpose-built savings analysis workflow** — prospect uploads a file, gets a formatted savings report in minutes, with a human review queue for uncertain matches. That last mile of workflow automation is what this POC demonstrates. The production version would integrate Base86's matching data as an input rather than replacing it.
+
+---
+
 ## Architecture
 
 A three-pass matching pipeline that starts cheap and fast, escalates only when needed:
 
 ```
-[Prospect CSV Upload]
+[Prospect CSV / Excel Upload]
+  (Benco, Patterson, Henry Schein, any supplier export format)
         │
         ▼
 [Ingestion + Normalization]
-  - Lowercase, expand abbreviations (bx→box, pk→pack, ea→each…)
+  - Auto-detect column names (Item Number → description, Your Price → unit_price, etc.)
+  - Lowercase, expand abbreviations (bx→box, pk→pack, ea→each, cs→case)
   - Strip punctuation, normalize whitespace
   - SKU: strip non-alphanumeric, uppercase
+  - Drop empty rows from Excel exports
         │
         ▼
 [Pass 1: Exact SKU Match]  ──────────────────── Match? → HIGH confidence
   Dict lookup on normalized supplier/manufacturer SKU
+  (In production: lookup against ZenOne SKU index)
         │ No match
         ▼
-[Pass 2: Fuzzy Description Match]  ─────────── Score ≥ 85? → MEDIUM/HIGH
+[Pass 2: Fuzzy Description Match]  ─────────── Score ≥ 72? → MEDIUM/HIGH
   RapidFuzz token_sort_ratio against catalog descriptions
+  (In production: against Base86 normalized product names)
         │ Score < threshold
         ▼
 [Pass 3: Claude AI Semantic Match]  ─────────── Batch of up to 20 items
   Sends ambiguous items + top fuzzy candidates to Claude
+  System prompt: dental supply domain expert
   Structured JSON response: {catalog_id, confidence, reasoning}
-  Falls back to best fuzzy result if API unavailable
+  Falls back to best fuzzy score if API unavailable
         │
         ▼
 [Confidence Scoring]
   🟢 HIGH ≥ 90   → Auto-accepted
-  🟡 MEDIUM ≥ 70 → Flagged for quick review
-  🔴 LOW < 70    → Review queue (human decision)
+  🟡 MEDIUM ≥ 70 → Flagged for quick human review
+  🔴 LOW < 70    → Review queue (human makes the call)
         │
         ▼
-[Output: Results Table + CSV Download + Review Queue]
+[Output Tabs]
+  All Results | Needs Review | Unmatched
+  + Download full CSV report
 ```
 
-**Why three passes?** Exact SKU is free and instant. Fuzzy catches ~70% of remaining items at negligible cost. Claude handles the genuinely ambiguous cases — brand aliases, pack size conversions, generic vs. branded equivalents. Batching keeps API cost to cents per analysis.
+**Why three passes?** Exact SKU is free and instant. Fuzzy catches ~70% of remaining items at negligible cost. Claude handles genuinely ambiguous cases — brand aliases, pack-size conversions, generic vs. branded equivalents. Batching keeps API cost to pennies per analysis.
 
 ---
 
@@ -53,11 +75,14 @@ A three-pass matching pipeline that starts cheap and fast, escalates only when n
 
 | Tool | Purpose | Cost |
 |------|---------|------|
-| `pandas` | CSV ingestion, data wrangling | Free / OSS |
+| `pandas` | CSV/Excel ingestion, data wrangling | Free / OSS |
+| `openpyxl` | Excel `.xlsx` support, multi-sheet handling | Free / OSS |
 | `rapidfuzz` | Fuzzy string matching | Free / OSS (MIT) |
-| `streamlit` | Web UI (no frontend code needed) | Free / OSS |
-| `anthropic` SDK | Claude API for ambiguous matches | Pay-per-use (~<$0.10/analysis) |
+| `streamlit` | Web UI — no frontend code needed | Free / OSS |
+| `anthropic` SDK | Claude API for ambiguous matches | ~<$0.10/analysis |
 | `python-dotenv` | API key loading | Free / OSS |
+| **ZenOne** *(production)* | Live catalog pricing via API | Existing contract |
+| **Base86** *(production)* | Normalized product knowledge base | Existing contract |
 
 ---
 
@@ -69,55 +94,67 @@ cd assignment-1-savings-analysis
 # Install dependencies
 pip install -r requirements.txt
 
-# Add your Anthropic API key (optional — app works without it in fuzzy-only mode)
+# Add your Anthropic API key (optional — app works without it)
 cp .env.example .env
-# Edit .env and add your ANTHROPIC_API_KEY
+# Edit .env: set ANTHROPIC_API_KEY=your_key_here
 
-# Launch the app
+# Launch
 streamlit run app.py
 ```
 
-Then open `http://localhost:8501`.
+Open `http://localhost:8501` → click **Load sample** on both uploaders → instant demo, no API key needed.
 
-Click **Load sample data** on both uploaders for an instant demo — no files needed.
+**No API key?** App runs in fuzzy-only mode (Pass 3 skipped). Match rate is ~78% on sample data; AI mode pushes it higher on ambiguous items.
 
-### CLI / No API Key
+---
 
-The app runs in **fuzzy-only mode** if no API key is set. Pass 3 is skipped; unresolved items go directly to the review queue. Match rate drops slightly on ambiguous items, but the core functionality works.
+## Supported Input Formats
+
+The app auto-detects column names from any supplier export:
+
+| Supplier | Column Names Auto-Detected |
+|---------|---------------------------|
+| **Benco Dental** | `Item Number`, `Your Price`, `Qty Ordered`, `Mfr#`, `Extended Price` |
+| **Patterson Dental** | `Catalog#`, `Item Name`, `Net Price`, `Quantity`, `Unit of Measure` |
+| **Henry Schein** | `Product Number`, `Product Description`, `Price Each`, `Units Ordered` |
+| **Generic CSV/Excel** | Any common variant — falls back to manual mapping UI if not detected |
+
+If a column isn't auto-detected, the app shows a dropdown for manual mapping before running.
 
 ---
 
 ## Sample Data
 
 `sample_data/prospect_purchase_history.csv` — 28 rows exercising all match paths:
-- 8 rows with clean SKU matches (easy wins → HIGH confidence)
-- 10 rows with description variations (fuzzy match → MEDIUM/HIGH)
-- 5 rows with pack-size or unit differences (normalization handles these)
-- 5 genuinely ambiguous rows (Claude resolves with reasoning)
-- 2 intentionally unmatched items (Source Club doesn't carry them)
+- 8 rows: clean SKU matches → HIGH confidence
+- 10 rows: description variations (e.g. "Nitrile Exam Gloves Medium 100/bx" vs. "EXAM GLOVES NITRILE MED 100CT")
+- 5 rows: pack-size normalization required
+- 5 rows: genuinely ambiguous → Claude resolves with reasoning
+- 2 rows: intentionally unmatched (items Source Club doesn't carry)
 
-Pricing is based on realistic dental supply market rates; the resulting savings totals align with Source Club's stated $10K–$30K/year member savings range.
+Pricing uses realistic dental supply market rates. Savings totals align with Source Club's stated $10K–$30K/year member savings range.
 
 ---
 
 ## What This POC Doesn't Cover (Yet)
 
-This is a working proof-of-concept, not a production system. The right direction is clear; it just needs more time to build:
+This is a working proof-of-concept. The right direction is clear; it just needs time:
 
-**Immediate next steps:**
-- Connect to the live Source Club catalog (Google Sheets API or direct DB query) instead of a static CSV
-- Handle `.xlsx` uploads and multi-sheet workbooks (how most suppliers export)
-- Add a simple one-click "approve match" / "correct match" flow for the review queue
+**Immediate (Week 1–2):**
+- Connect to live ZenOne catalog via API instead of static CSV
+- Pull Base86's normalized product data as the matching knowledge base
+- One-click "approve / correct" flow in the review queue tab
 
 **Short-term (Month 1):**
-- **Streamlit Cloud or self-hosted deploy** so the founder doesn't need to run it locally
-- **SQLite match cache** — previously confirmed matches are reused instantly, reducing Claude API calls to near zero over time
-- **Pack size normalization** — handle "100/box @ $18" vs. "50/box @ $10" unit-price equivalence automatically
+- **Hosted deploy** (Streamlit Cloud or Azure Container Apps) — no local install needed
+- **Match cache** — confirmed matches stored locally; Claude API calls drop to near zero over time
+- **Pack size unit normalization** — "100/box @ $18" vs. "50/box @ $10" auto-converted to per-unit price before comparing
 
-**The real production architecture (Graph RAG):**
-> At scale, the right solution is a **product knowledge graph** — dental supply items as nodes, with edges representing "same product, different supplier branding." A Graph RAG system would embed all catalog items, build semantic relationships across supplier naming conventions, and match new items against the graph rather than a flat list. Accuracy improves continuously as more data flows through it. For a small team doing 20–40 analyses/month, the 3-pass pipeline above is the pragmatic POC that gets the job done today.
+**Production architecture:**
+> The right long-term system is a **product knowledge graph** backed by Base86's catalog data — dental supply items as nodes, edges representing "same product, different supplier branding." A Graph RAG layer over this graph would match new items semantically, with accuracy improving continuously as more analyses run through it. The three-pass pipeline above is the pragmatic POC that gets the job done today and demonstrates the approach.
 
-**Longer-term:**
-- Trigger automatically when a prospect submits their purchase history via a web form
-- Email the completed savings analysis back within minutes, no founder involvement required
-- Track match-rate metrics over time to measure improvement
+**Full workflow automation (Long-term):**
+- Prospect submits purchase history via web form
+- Automated pipeline runs matching, calculates savings
+- Formatted savings report emailed back in minutes — zero founder involvement
+- Ties into PandaDoc/Stripe pipeline for seamless member enrollment after conversion

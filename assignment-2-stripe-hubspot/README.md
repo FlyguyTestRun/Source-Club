@@ -9,6 +9,8 @@ Stripe is the billing source of truth. HubSpot is the relationship source of tru
 - Multi-location practices (one HubSpot Company, potentially multiple Stripe subscriptions) have no unified view
 - The name your member gave Stripe and the name in HubSpot may not match — so even manual cross-referencing is error-prone
 
+> **Note on the full systems picture:** Source Club also uses **ZenOne** (procurement platform) and **Base86** (AI-driven product matching) as part of the member experience. The integration architecture below focuses on the billing/CRM gap (Stripe → HubSpot), but the same n8n workflow can be extended to sync ZenOne member status and Base86 usage data into HubSpot Company records — giving the team a single source of truth for each member's full lifecycle (billing health + procurement activity + savings tracked).
+
 ---
 
 ## Three Options
