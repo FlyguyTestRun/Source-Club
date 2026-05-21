@@ -1,0 +1,29 @@
+catalog_id,manufacturer_sku,supplier_sku,description,pack_size,unit_of_measure,source_club_price,category
+SC-001,GLV-NIT-MED-100,P1001,Nitrile Exam Gloves Medium,100,box,12.50,Gloves
+SC-002,GLV-NIT-SM-100,P1002,Nitrile Exam Gloves Small,100,box,12.50,Gloves
+SC-003,GLV-NIT-LG-100,P1003,Nitrile Exam Gloves Large,100,box,12.50,Gloves
+SC-004,GLV-NIT-XL-100,P1004,Nitrile Exam Gloves X-Large,100,box,12.50,Gloves
+SC-005,PRO-PAST-MNT-200,P2001,Prophy Paste Mint Medium Grit 200g,200,gram,8.75,Preventive
+SC-006,PRO-PAST-CHR-200,P2002,Prophy Paste Cherry Coarse 200g,200,gram,8.75,Preventive
+SC-007,PRO-PAST-STR-200,P2003,Prophy Paste Strawberry Fine 200g,200,gram,8.75,Preventive
+SC-008,COMP-A2-4G,P3001,Composite Resin A2 Shade 4g Syringe,4,gram,26.00,Restorative
+SC-009,COMP-A3-4G,P3002,Composite Resin A3 Shade 4g Syringe,4,gram,26.00,Restorative
+SC-010,COMP-B2-4G,P3003,Composite Resin B2 Shade 4g Syringe,4,gram,26.00,Restorative
+SC-011,ANESTH-LIDO-100,P4001,Lidocaine 2% Epinephrine Carpules 100ct,100,each,20.00,Anesthesia
+SC-012,ANESTH-ARTIC-100,P4002,Articaine 4% Epinephrine Carpules 100ct,100,each,22.50,Anesthesia
+SC-013,ANESTH-MEPIV-100,P4003,Mepivacaine 3% Carpules 100ct,100,each,19.50,Anesthesia
+SC-014,CTN-ROLL-MED-2000,P5001,Cotton Rolls Medium Non-Sterile,2000,each,7.25,Consumables
+SC-015,CTN-ROLL-LG-2000,P5002,Cotton Rolls Large Non-Sterile,2000,each,7.75,Consumables
+SC-016,STER-POUCH-35-200,P6001,Sterilization Self-Seal Pouches 3.5x5.25in 200ct,200,each,9.00,Sterilization
+SC-017,STER-POUCH-57-200,P6002,Sterilization Self-Seal Pouches 5.25x7.5in 200ct,200,each,11.50,Sterilization
+SC-018,BIB-3PLY-500,P7001,Dental Patient Bibs 3-Ply Paper 500ct,500,each,15.00,Consumables
+SC-019,MASK-SURG-BLUE-50,P8001,Surgical Face Masks Blue ASTM Level 2 50ct,50,each,6.50,PPE
+SC-020,MASK-N95-20,P8002,N95 Respirator Masks NIOSH Approved 20ct,20,each,14.00,PPE
+SC-021,ALGINATE-CHRM-1LB,P9001,Chromatic Alginate Impression Material 1lb,1,pound,8.00,Impression
+SC-022,ALGINATE-FAST-1LB,P9002,Fast Set Alginate Impression Material 1lb,1,pound,7.50,Impression
+SC-023,ENDO-FILE-21MM-60,P10001,Endodontic Hand Files 21mm Assorted 60ct,60,each,18.50,Endodontics
+SC-024,ENDO-FILE-25MM-60,P10002,Endodontic Hand Files 25mm Assorted 60ct,60,each,18.50,Endodontics
+SC-025,BONDING-5ML,P11001,Universal Dental Bonding Agent 5ml Bottle,5,ml,28.00,Restorative
+SC-026,ETCH-35-3ML,P11002,35% Phosphoric Acid Etch Gel 3ml Syringe,3,ml,3.50,Restorative
+SC-027,FLOSS-WAXED-200M,P12001,Waxed Dental Floss 200m,200,meter,4.00,Preventive
+SC-028,TOPICAL-BENZ-28G,P13001,Topical Anesthetic Benzocaine 20% 28g Jar,28,gram,9.00,Anesthesia

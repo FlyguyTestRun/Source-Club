@@ -1,0 +1,29 @@
+row_index,prospect_description,matched_catalog_id,matched_description,match_method,match_score,confidence_tier,prospect_price,source_club_price,quantity_per_year,line_savings
+0,Nitrile Exam Gloves Medium,SC-001,Nitrile Exam Gloves Medium,exact_sku,100.0,HIGH,18.5,12.5,24.0,144.0
+1,Nitrile Exam Gloves Small,SC-002,Nitrile Exam Gloves Small,exact_sku,100.0,HIGH,18.5,12.5,12.0,72.0
+2,EXAM GLOVES NITRILE LG 100CT,SC-003,Nitrile Exam Gloves Large,exact_sku,100.0,HIGH,19.0,12.5,18.0,117.0
+3,Nitrile Gloves XL Box 100,,,none,0.0,LOW,19.25,0.0,12.0,0.0
+4,Prophy Paste Mint Med Grit 200g,SC-005,Prophy Paste Mint Medium Grit 200g,exact_sku,100.0,HIGH,14.25,8.75,36.0,198.0
+5,PROPHY PASTE CHERRY COARSE 200G,SC-006,Prophy Paste Cherry Coarse 200g,fuzzy,100.0,HIGH,14.5,8.75,24.0,138.0
+6,strawberry prophy paste fine grit,SC-007,Prophy Paste Strawberry Fine 200g,fuzzy,84.84848484848484,MEDIUM,14.25,8.75,18.0,99.0
+7,Composite Resin A2 4g Syringe,SC-008,Composite Resin A2 Shade 4g Syringe,exact_sku,100.0,HIGH,42.0,26.0,48.0,768.0
+8,COMPOSITE RESIN A3 SHADE 4GM SYR,SC-009,Composite Resin A3 Shade 4g Syringe,fuzzy,98.59154929577466,HIGH,43.5,26.0,36.0,630.0
+9,composite b2 4g,,,none,0.0,LOW,42.75,0.0,24.0,0.0
+10,Lidocaine 2% w/Epi Carpules 100pk,SC-011,Lidocaine 2% Epinephrine Carpules 100ct,exact_sku,100.0,HIGH,34.0,20.0,24.0,336.0
+11,ARTICAINE 4% EPI CARPULES BOX 100,SC-012,Articaine 4% Epinephrine Carpules 100ct,fuzzy,92.3076923076923,HIGH,38.0,22.5,18.0,279.0
+12,Mepivacaine 3% 100ct box,SC-013,Mepivacaine 3% Carpules 100ct,fuzzy,78.43137254901961,MEDIUM,33.5,19.5,12.0,168.0
+13,Cotton Rolls Medium 2000/bag,SC-014,Cotton Rolls Medium Non-Sterile,exact_sku,100.0,HIGH,12.0,7.25,12.0,57.0
+14,Cotton Rolls Large Bag 2000,,,none,0.0,LOW,12.75,0.0,8.0,0.0
+15,Self Seal Sterilization Pouches 3.5x5.25 200ct,SC-016,Sterilization Self-Seal Pouches 3.5x5.25in 200ct,exact_sku,100.0,HIGH,15.5,9.0,24.0,156.0
+16,Sterilization Pouches 5x7 200pk,SC-017,Sterilization Self-Seal Pouches 5.25x7.5in 200ct,fuzzy,73.41772151898735,MEDIUM,18.75,11.5,18.0,130.5
+17,3-ply Dental Patient Bibs 500ct,SC-018,Dental Patient Bibs 3-Ply Paper 500ct,exact_sku,100.0,HIGH,24.0,15.0,24.0,216.0
+18,Surgical Masks Blue Level 2 ASTM 50ct,SC-019,Surgical Face Masks Blue ASTM Level 2 50ct,exact_sku,100.0,HIGH,12.0,6.5,48.0,264.0
+19,N95 Respirators 20 count,,,none,0.0,LOW,22.5,0.0,24.0,0.0
+20,Chromatic Alginate 1lb,SC-021,Chromatic Alginate Impression Material 1lb,exact_sku,100.0,HIGH,13.0,8.0,24.0,120.0
+21,Fast Set Alginate Impression Material 454g,SC-022,Fast Set Alginate Impression Material 1lb,fuzzy,91.56626506024097,HIGH,12.75,7.5,18.0,94.5
+22,Endo Hand Files 21mm Assorted 60 pack,SC-023,Endodontic Hand Files 21mm Assorted 60ct,exact_sku,100.0,HIGH,32.0,18.5,12.0,162.0
+23,Universal Bonding Agent 5mL,SC-025,Universal Dental Bonding Agent 5ml Bottle,exact_sku,100.0,HIGH,48.0,28.0,24.0,480.0
+24,Phosphoric Acid 35% Etch 3mL Syringe,SC-026,35% Phosphoric Acid Etch Gel 3ml Syringe,fuzzy,94.5945945945946,HIGH,7.25,3.5,48.0,180.0
+25,Waxed Floss 200 meters,,,none,0.0,LOW,8.5,0.0,24.0,0.0
+26,Topical Anesthetic Benzo 20% Jar 28g,SC-028,Topical Anesthetic Benzocaine 20% 28g Jar,fuzzy,93.33333333333333,HIGH,16.5,9.0,18.0,135.0
+27,Dental Chair Covers Pack of 50,,,none,0.0,LOW,28.0,0.0,12.0,0.0
