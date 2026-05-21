@@ -1,0 +1,61 @@
+name: Build & Deploy to Azure Container Apps
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:           # allows manual trigger from GitHub UI
+
+env:
+  REGISTRY:          ${{ secrets.ACR_LOGIN_SERVER }}   # e.g. inflexisacr.azurecr.io
+  IMAGE_NAME:        source-club-casestudy
+  RESOURCE_GROUP:    ${{ secrets.AZURE_RESOURCE_GROUP }}
+  CONTAINER_APP:     source-club-app
+  CONTAINER_ENV:     source-club-env
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Checkout ─────────────────────────────────────────────────────────
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ── Azure login ───────────────────────────────────────────────────────
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # ── Build & push image to ACR ─────────────────────────────────────────
+      - name: Log in to Azure Container Registry
+        run: az acr login --name ${{ secrets.ACR_NAME }}
+
+      - name: Build and push Docker image
+        run: |
+          IMAGE_TAG=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          LATEST_TAG=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+          docker build -t $IMAGE_TAG -t $LATEST_TAG .
+          docker push $IMAGE_TAG
+          docker push $LATEST_TAG
+
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+
+      # ── Deploy to Azure Container Apps ────────────────────────────────────
+      - name: Deploy to Azure Container Apps
+        run: |
+          az containerapp update \
+            --name ${{ env.CONTAINER_APP }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --image ${{ env.IMAGE_TAG }} \
+            --set-env-vars ANTHROPIC_API_KEY=secretref:anthropic-api-key
+
+      # ── Print public URL ──────────────────────────────────────────────────
+      - name: Get app URL
+        run: |
+          URL=$(az containerapp show \
+            --name ${{ env.CONTAINER_APP }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --query properties.configuration.ingress.fqdn -o tsv)
+          echo "✅ App live at: https://$URL"
