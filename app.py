@@ -17,8 +17,9 @@ st.divider()
 
 # ── Intro ────────────────────────────────────────────────────────────────────
 st.markdown("""
-This app contains all four assignments for the Source Club case study.
-Navigate using the sidebar — or click any card below to jump to an assignment.
+This app contains all four assignments for the Source Club case study, plus a bonus
+**90-Day Architecture Scope** document covering platform selection and system design.
+Navigate using the sidebar — or click any card below.
 """)
 
 # ── Assignment cards ─────────────────────────────────────────────────────────
@@ -29,18 +30,18 @@ with col1:
         st.markdown("### 💰 Assignment 1")
         st.markdown("**Savings Analysis Automation**")
         st.markdown(
-            "Upload a prospect's purchase history → get an instant savings report. "
-            "Three-pass matching: exact SKU → fuzzy → Claude AI."
+            "Upload a prospect's purchase history → instant savings report. "
+            "Three-pass matching: exact SKU → fuzzy → Gemini/Claude AI."
         )
-        st.markdown("🟢 Working demo — try it now")
+        st.markdown("🟢 **Working demo — try it now**")
         st.page_link("pages/1_💰_Savings_Analysis.py", label="Open Savings Analyzer →")
 
     with st.container(border=True):
         st.markdown("### 🔗 Assignment 2")
         st.markdown("**Stripe × HubSpot Integration**")
         st.markdown(
-            "Three integration options analyzed. Recommendation: n8n (free, self-hosted). "
-            "Includes multi-location data model + HubSpot property schema."
+            "Three options analyzed. Recommendation: n8n (free, self-hosted). "
+            "Multi-location data model + HubSpot property schema."
         )
         st.page_link("pages/2_🔗_Stripe_HubSpot.py", label="View Architecture →")
 
@@ -49,8 +50,8 @@ with col2:
         st.markdown("### 📋 Assignment 3")
         st.markdown("**Project Prioritization**")
         st.markdown(
-            "Ranked 5 projects using a Revenue Impact × Operational Leverage × Sequencing "
-            "framework. Includes a 90-day sprint plan."
+            "Ranked 5 projects: Revenue Impact × Operational Leverage × Sequencing. "
+            "90-day sprint plan with rationale."
         )
         st.page_link("pages/3_📋_Prioritization.py", label="View Prioritization →")
 
@@ -59,29 +60,48 @@ with col2:
         st.markdown("**Video Walkthrough**")
         st.markdown(
             "3–5 minute Loom walkthrough covering all three assignments. "
-            "Screen-share of the live app + architecture decisions."
+            "Live demo of the savings analyzer."
         )
         st.page_link("pages/4_🎥_Video_Walkthrough.py", label="View Video →")
+
+st.divider()
+
+# ── Bonus: Architecture scope card ───────────────────────────────────────────
+with st.container(border=True):
+    st.markdown("### 🏗️ Bonus: 90-Day Architecture Scope")
+    col_a, col_b = st.columns([2, 1])
+    with col_a:
+        st.markdown(
+            "Full platform decision (AWS Bedrock vs Azure AI Foundry vs **Google Vertex AI**), "
+            "end-state system architecture diagram, phased build plan, tech stack, cost model, "
+            "and Day 1 checklist. Informed by Source Club's confirmed use of Google Workspace, "
+            "ZenOne, Base86, and their existing Stripe + HubSpot stack."
+        )
+        st.page_link("pages/5_🏗️_Architecture_Scope.py", label="View Architecture Scope →")
+    with col_b:
+        st.metric("GCP AI Track Credits", "$350K", "vs $150K Azure / $100K AWS")
 
 st.divider()
 
 # ── Approach note ────────────────────────────────────────────────────────────
 with st.expander("📝 Approach & Assumptions"):
     st.markdown("""
-**On the stack:** Everything here is free and open-source — pandas, RapidFuzz, Streamlit, n8n.
-Tools a small team can actually run and maintain, not enterprise overhead.
+**On the existing stack:** Source Club uses **Base86** (AI product matching) and **ZenOne**
+(procurement, 200K+ normalized SKUs) — confirmed from their SOP documentation.
+The savings analysis POC replicates Base86's core matching logic with open-source tools for this
+demo; the production version integrates directly with ZenOne and Base86.
 
-**On the production vision:** The right long-term architecture for product matching at scale
-is a **knowledge graph with Graph RAG** — dental supply items as nodes, semantic edges across
-supplier naming conventions, continuous learning from confirmed matches.
-That's a multi-week build. This POC demonstrates the concept and gets the job done today.
+**On the AI platform:** Google Vertex AI is recommended. Source Club uses Google Docs (confirmed).
+Vertex AI agents connect natively to Google Workspace — no custom connectors needed. GCP's
+AI Track startup program provides up to $350K in credits vs $150K Azure / $100K AWS.
 
-**Assumptions made:**
-- Prospect purchase history arrives as CSV (most common export from dental practice management software)
-- Source Club's catalog is relatively stable — a static CSV or periodic refresh works for the POC
-- Annual quantity in the prospect file = actual purchasing frequency, not a one-time order
-- The Stripe + HubSpot naming mismatch is solved with a one-time reconciliation script + indexed
-  `stripe_customer_id` property going forward
-- Project prioritization is based on context in the case study brief; rankings would be refined
-  with 30 minutes of conversation about current ARR, churn rate, and team bandwidth
+**On the production vision:** The full automation is a 5-agent Vertex AI pipeline:
+intake form → Base86/ZenOne catalog lookup → savings calculation →
+Google Doc report generation → HubSpot CRM sync. No founder involvement required.
+
+**Assumptions:**
+- Prospect purchase history = CSV/Excel export from dental supplier (Benco, Patterson, Schein)
+- Source Club's catalog lives in ZenOne; static CSV used here as a stand-in for the POC
+- The Stripe + HubSpot naming mismatch is solved with a one-time reconciliation script
+- Project priorities would be refined with 30 min of conversation about ARR, churn rate, and team bandwidth
     """)
