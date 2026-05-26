@@ -50,8 +50,8 @@ with col2:
         st.markdown("### 📋 Assignment 3")
         st.markdown("**Project Prioritization**")
         st.markdown(
-            "Ranked 5 projects: Revenue Impact × Operational Leverage × Sequencing. "
-            "90-day sprint plan with rationale."
+            "Prioritized Source Club's real ~23-item project queue: top 5 for the first 90 days, "
+            "with impact × leverage × sequencing rationale and what I'd defer."
         )
         st.page_link("pages/3_📋_Prioritization.py", label="View Prioritization →")
 

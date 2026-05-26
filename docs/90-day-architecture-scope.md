@@ -163,6 +163,13 @@ MEMBER ONBOARDING (AUTOMATED)
 
 ## 90-Day Sprint Plan
 
+> **How this relates to Assignment 3.** This doc is the broader *systems vision*. Assignment 3
+> prioritizes Source Club's **actual project queue** and is the authoritative sequencing — where the
+> two differ, A3 governs. The phases below map onto real queue items (savings automation `2.1`,
+> Stripe↔HubSpot `1.1`, reporting/health-score off `1.2`+`1.1`); the **member portal / referral**
+> pieces in Phase 4 are *forward-looking* — not in the current queue, but where I'd take the member
+> experience next once the data backbone exists.
+
 ### Phase 1 — Weeks 1–3: Remove the Bottleneck
 
 **Goal:** Take the founder out of the per-analysis loop — from ~10 min of hands-on work each (5–7+ hrs/month) to near-zero, with only edge cases reviewed.
