@@ -1,89 +1,124 @@
 # Source Club — Case Study Project
 
 ## What This Is
-A complete case study submission for the **Head of AI Powered Operations, Systems & RevOps** role at Source Club — a dental Group Purchasing Organization (GPO). Built as a working Streamlit multi-page web app.
+A case-study submission for the **Head of AI Powered Operations, Systems & RevOps** role at
+Source Club — a dental Group Purchasing Organization (GPO). It is delivered as a working Streamlit
+multi-page web app plus supporting decision documents.
+
+**One deliverable is live code, three are documents:**
+
+| # | Deliverable | Type | Where |
+|---|-------------|------|-------|
+| 1 | Savings Analysis Automation | **Working app** | `assignment-1-savings-analysis/` + `pages/1_*` |
+| 2 | Stripe × HubSpot Integration | Decision doc | `assignment-2-stripe-hubspot/README.md` + `pages/2_*` |
+| 3 | Project Prioritization | Decision doc | `assignment-3-prioritization/README.md` + `pages/3_*` |
+| 4 | Video Walkthrough | Loom placeholder | `assignment-4-video/README.md` + `pages/4_*` |
+| Bonus | 90-Day Architecture Scope | Strategy doc | `docs/90-day-architecture-scope.md` + `pages/5_*` |
+
+For a reviewer-facing "how to run and what to look at" walkthrough, see `INTERVIEWER_GUIDE.md`.
 
 ## How to Run
 ```bash
 pip install -r requirements.txt
 streamlit run app.py
-# Opens at http://localhost:8501
+# Opens at http://localhost:8501 — landing page with all 5 pages in the sidebar
 ```
+The savings analyzer also runs standalone:
+```bash
+cd assignment-1-savings-analysis
+streamlit run app.py   # http://localhost:8501
+```
+Both entry points share one implementation (`savings_ui.py`) — there is no duplicated logic.
 
 ## Project Structure
 ```
 Source-Club/
-├── app.py                              ← Main landing page (run this)
-├── pages/
-│   ├── 1_💰_Savings_Analysis.py       ← Live working savings analysis tool
-│   ├── 2_🔗_Stripe_HubSpot.py        ← Stripe/HubSpot architecture doc
-│   ├── 3_📋_Prioritization.py         ← Project prioritization framework
-│   ├── 4_🎥_Video_Walkthrough.py      ← Video placeholder (add Loom URL here)
-│   └── 5_🏗️_Architecture_Scope.py    ← 90-day architecture scope
+├── app.py                              ← Landing page (run this)
+├── INTERVIEWER_GUIDE.md                ← Cold-start run + review guide
+├── pages/                              ← Multipage tabs (1 is live, 2–5 render docs)
+│   ├── 1_💰_Savings_Analysis.py        ← Thin wrapper → savings_ui.render_savings_app()
+│   ├── 2_🔗_Stripe_HubSpot.py
+│   ├── 3_📋_Prioritization.py
+│   ├── 4_🎥_Video_Walkthrough.py       ← add Loom URL here
+│   └── 5_🏗️_Architecture_Scope.py
 ├── assignment-1-savings-analysis/
-│   ├── app.py                          ← Standalone savings app (also works solo)
-│   ├── matcher.py                      ← 3-pass matching logic (SKU → fuzzy → AI)
-│   ├── report_generator.py             ← CSV + summary output
-│   ├── requirements.txt                ← Python deps for standalone run
-│   ├── .env.example                    ← Copy to .env, add ANTHROPIC_API_KEY
-│   └── sample_data/                    ← 28-row dental supply test data
+│   ├── savings_ui.py                    ← Shared UI + run loop + savings math (source of truth)
+│   ├── app.py                           ← Standalone entry (thin wrapper)
+│   ├── matcher.py                       ← 3-pass matching (SKU → fuzzy → Claude AI)
+│   ├── report_generator.py              ← Summary + CSV output
+│   ├── sample_data/                     ← 28-row prospect file + 28-item catalog
+│   └── .env.example                     ← Copy to .env, add ANTHROPIC_API_KEY (optional)
 ├── assignment-2-stripe-hubspot/README.md
 ├── assignment-3-prioritization/README.md
 ├── assignment-4-video/README.md
-├── docs/
-│   └── 90-day-architecture-scope.md   ← Full platform + architecture document
-├── Dockerfile                          ← Container (for future Azure deploy)
-├── .github/workflows/deploy-azure.yml ← CI/CD to Azure Container Apps
-└── deploy/azure-setup.md              ← Azure CLI setup commands
+├── docs/90-day-architecture-scope.md
+├── Dockerfile / .github/ / deploy/      ← Phase-2 Azure deploy (not needed to review)
+└── requirements.txt
 ```
 
-## Key Architecture Decisions
-- **AI Platform:** Google Vertex AI (GCP) — Source Club uses Google Workspace; GCP gives $350K startup credits
-- **Matching pipeline:** 3-pass: exact SKU → RapidFuzz fuzzy → Claude/Gemini AI
-- **CRM/Billing sync:** n8n (self-hosted, free) — Stripe webhooks → HubSpot properties
-- **Existing tools:** ZenOne (pricing catalog), Base86 (AI product matching)
-- **File support:** CSV + Excel (.xlsx), auto-detects Benco/Patterson/Schein column headers
+## Assignment 1 — Savings Analysis (the live tool)
+Upload a prospect's dental-supply purchase history (CSV or Excel) + the Source Club catalog →
+instant savings report with confidence tiers.
+
+**Matching pipeline (in `matcher.py`):**
+1. **Exact SKU** — normalized dict lookup on supplier/manufacturer SKU (instant).
+2. **Fuzzy description** — RapidFuzz `token_sort_ratio`, threshold 72 (adjustable in the sidebar).
+3. **Claude AI** — batched semantic match for ambiguous items; needs `ANTHROPIC_API_KEY`,
+   model `claude-haiku-4-5-20251001`. Optional — skipped if no key.
+
+**Confidence tiers:** 🟢 HIGH ≥ 90 · 🟡 MEDIUM ≥ 70 · 🔴 LOW < 70. MEDIUM/LOW land in a review queue.
+
+**Savings math (`compute_line_savings` in `savings_ui.py`):** prices are normalized to a
+**per-single-item** basis when both pack sizes are present and the units of measure match — so
+"100/box @ $18" vs "50/box @ $10" compares correctly. When pack size is missing or units differ
+(e.g. grams vs pounds), it falls back to a direct pack-price comparison. Each result row records
+which basis was used (`savings_basis`).
+
+**Column auto-detection** handles real Benco/Patterson/Schein export headers; falls back to a manual
+mapping UI when a header isn't recognized.
+
+**Demo without an API key:** click **Load sample** on both uploaders → **Run** → works in
+fuzzy-only mode. Sample data yields **~$4,944 savings at a 78.6% match rate** (19 HIGH, 3 MEDIUM,
+6 unmatched).
+
+## Key Architecture Decisions (production vision — see `docs/`)
+- **AI platform:** Google Vertex AI (Source Club runs on Google Workspace; GCP AI Track offers up to
+  $350K credits). This POC uses the Anthropic API directly; production would use Gemini via Vertex.
+- **Matching at scale:** integrate ZenOne (catalog, 200K+ normalized SKUs) + Base86 (AI matching)
+  rather than the static sample CSV used here.
+- **CRM/billing sync:** n8n (self-hosted) — Stripe webhooks → HubSpot Company properties.
 
 ## Source Club's Tech Stack (confirmed)
 | Tool | Role |
 |------|------|
 | Stripe | Billing / subscriptions |
 | HubSpot | CRM |
-| ZenOne | Procurement platform — 200K+ normalized dental SKUs |
+| ZenOne | Procurement — 200K+ normalized dental SKUs |
 | Base86 | AI-driven product matching |
-| Google Workspace | Docs, Drive, Gmail (confirmed from SOP screenshot) |
+| Google Workspace | Docs, Drive, Gmail |
 | PandaDoc | Contracts / proposals |
-| n8n | Proposed: Stripe ↔ HubSpot workflow automation |
+| n8n | Proposed: Stripe ↔ HubSpot automation |
 
-## Assignment 1 — Savings Analysis (the live tool)
-The core POC. Upload a prospect's dental supply purchase history (CSV or Excel) + the Source Club catalog → instant savings report with confidence tiers.
-
-**Matching pipeline:**
-1. Exact SKU lookup (dict, instant)
-2. Fuzzy description match (RapidFuzz token_sort_ratio, threshold 72)
-3. Claude AI semantic match (batched, optional — needs `ANTHROPIC_API_KEY`)
-
-**Column auto-detection** handles real Benco/Patterson/Schein export headers automatically. Falls back to a manual mapping UI if headers aren't recognized.
-
-**To demo without API key:** Load sample data → Run → works in fuzzy-only mode (~78% match rate on sample data).
+## Known Limitations / Next Steps
+- Pack-size unit normalization: **done** (per-unit comparison with safe fallback).
+- Static CSV catalog → replace with live ZenOne API; pull Base86 normalized data as match input.
+- No match cache yet — confirmed matches should be persisted so Claude calls trend toward zero.
+- Cross-unit conversion (grams ↔ pounds) is intentionally *not* attempted; those rows fall back to
+  pack-price comparison rather than guess a conversion.
 
 ## Assignment 4 — Video (one thing left to do)
-Add your Loom URL to `pages/4_🎥_Video_Walkthrough.py`:
+Add the Loom URL in `pages/4_🎥_Video_Walkthrough.py`:
 ```python
-LOOM_URL = "https://loom.com/share/YOUR_ACTUAL_ID_HERE"  # ← change this line
+LOOM_URL = "https://loom.com/share/YOUR_ACTUAL_ID_HERE"
 ```
-
-## Future: Azure Deploy (Phase 2)
-Everything needed is already built:
-1. `Dockerfile` — containerized Streamlit app
-2. `.github/workflows/deploy-azure.yml` — GitHub Actions CI/CD
-3. `deploy/azure-setup.md` — step-by-step `az` CLI commands
-
-When ready: run the `az` commands in `deploy/azure-setup.md`, add 4 GitHub secrets, push to main → auto-deploys to Azure Container Apps.
 
 ## Environment Variables
 ```
-ANTHROPIC_API_KEY=your_key_here   # Optional — enables AI matching pass
+ANTHROPIC_API_KEY=your_key_here   # Optional — enables the Claude AI matching pass
 ```
+Copy `.env.example` → `.env` and fill in. The app works without it (fuzzy-only).
 
-Copy `.env.example` → `.env` and fill in. App works without it.
+## Future: Azure Deploy (Phase 2)
+`Dockerfile`, `.github/workflows/deploy-azure.yml`, and `deploy/azure-setup.md` contain a complete
+containerized deploy to Azure Container Apps. Not required to review the case study — it's the
+"how this ships" artifact.

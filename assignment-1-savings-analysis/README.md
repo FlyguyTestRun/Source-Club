@@ -145,10 +145,16 @@ This is a working proof-of-concept. The right direction is clear; it just needs 
 - Pull Base86's normalized product data as the matching knowledge base
 - One-click "approve / correct" flow in the review queue tab
 
+**Done in this POC:**
+- **Pack-size unit normalization** — when both pack sizes are present and units of measure match,
+  prices are compared on a per-single-item basis ("100/box @ $18" vs. "50/box @ $10" is correct);
+  rows with missing pack sizes or mismatched units (grams vs pounds) fall back to a direct
+  pack-price comparison rather than guessing a conversion.
+
 **Short-term (Month 1):**
 - **Hosted deploy** (Streamlit Cloud or Azure Container Apps) — no local install needed
 - **Match cache** — confirmed matches stored locally; Claude API calls drop to near zero over time
-- **Pack size unit normalization** — "100/box @ $18" vs. "50/box @ $10" auto-converted to per-unit price before comparing
+- **Cross-unit conversion** — a units table (g↔lb, mL↔L) so even mismatched-unit rows normalize
 
 **Production architecture:**
 > The right long-term system is a **product knowledge graph** backed by Base86's catalog data — dental supply items as nodes, edges representing "same product, different supplier branding." A Graph RAG layer over this graph would match new items semantically, with accuracy improving continuously as more analyses run through it. The three-pass pipeline above is the pragmatic POC that gets the job done today and demonstrates the approach.

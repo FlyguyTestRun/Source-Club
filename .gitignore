@@ -1,1 +1,3 @@
-assignment-1-savings-analysis/__pycache__/
+__pycache__/
+*.pyc
+.env
