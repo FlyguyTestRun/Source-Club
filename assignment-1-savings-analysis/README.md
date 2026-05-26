@@ -10,7 +10,9 @@ The core challenge: dental suppliers use completely inconsistent product naming,
 
 ## Existing Tech Stack Context
 
-Source Club already partners with two platforms that are directly relevant here:
+> **Assumption, not fact.** The brief confirms only Stripe and HubSpot. The two platforms below are
+> my working assumption (they'd be among the first things I'd confirm — see
+> `docs/questions-i-would-ask-first.md`). *If* Source Club uses them, here's how they fit:
 
 | Platform | Role | How It Fits |
 |----------|------|-------------|
@@ -132,7 +134,9 @@ If a column isn't auto-detected, the app shows a dropdown for manual mapping bef
 - 5 rows: genuinely ambiguous → Claude resolves with reasoning
 - 2 rows: intentionally unmatched (items Source Club doesn't carry)
 
-Pricing uses realistic dental supply market rates. Savings totals align with Source Club's stated $10K–$30K/year member savings range.
+Pricing uses realistic dental supply market rates. The 28-row sample is a deliberately small slice
+(it yields ~$4,944); a prospect's full purchase history would scale into Source Club's stated
+$10K–$30K/year member savings range.
 
 ---
 

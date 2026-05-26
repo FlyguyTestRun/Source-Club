@@ -67,8 +67,9 @@ samples.
 ## If you only have 5 minutes
 
 1. Run the demo above (Assignment 1) — that's the working artifact.
-2. Skim **🏗️ Architecture Scope** (bonus) — it shows the end-state system and why Vertex AI / ZenOne /
-   Base86 / n8n, grounded in Source Club's confirmed stack.
+2. Skim **🏗️ Architecture Scope** (bonus) — the end-state system and the platform reasoning. Note it's
+   *conditional* on assumptions (Google Workspace, ZenOne, Base86); only Stripe + HubSpot are confirmed
+   in the brief. The things I'd verify first are in `docs/questions-i-would-ask-first.md`.
 3. Skim **📋 Prioritization** — the sequencing argument (automation + integration first, portal/
    referrals later) is the core operating thesis.
 

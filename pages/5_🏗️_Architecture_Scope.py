@@ -13,6 +13,12 @@ st.title("🏗️ 90-Day Architecture Scope")
 st.caption("Platform decision + full system design for Weeks 1–12")
 st.divider()
 
+st.info(
+    "**Assumption check:** the brief confirms only Stripe + HubSpot. The platform pick below is "
+    "*conditional* on Source Club being on Google Workspace (assumed, not confirmed). What I'd "
+    "verify first is in `docs/questions-i-would-ask-first.md`."
+)
+
 # ── Platform decision callout ─────────────────────────────────────────────────
 col1, col2, col3 = st.columns(3)
 
@@ -37,8 +43,8 @@ with col3:
         st.markdown("#### ✅ Google Vertex AI")
         st.markdown("Google's AI platform — Gemini, Claude via Model Garden, native Google Workspace")
         st.markdown("**Credits: Up to $350K** (AI Track)")
-        st.markdown("**Workspace:** Already confirmed (Google Docs)")
-        st.success("Recommended — matches existing stack")
+        st.markdown("**Workspace:** Assumed (would confirm Day 1)")
+        st.success("Recommended *if* on Google Workspace")
 
 st.divider()
 

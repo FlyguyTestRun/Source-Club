@@ -10,7 +10,11 @@
 
 ### TL;DR
 
-Source Club runs on Google Workspace (confirmed). The right AI platform is **Google Vertex AI / Gemini Enterprise Agent Platform** — not AWS Bedrock, not Azure AI Foundry.
+**This recommendation is conditional on one assumption I'd confirm first: that Source Club runs on
+Google Workspace.** The brief only confirms Stripe and HubSpot — it does *not* state the cloud or
+productivity stack. *If* the team is on Google Workspace, the right AI platform is **Google Vertex
+AI / Gemini** — not AWS Bedrock, not Azure AI Foundry. If they're on Microsoft 365 or cloud-agnostic,
+this flips (see "What AWS/Azure would look like" below and `questions-i-would-ask-first.md`).
 
 ---
 
@@ -26,8 +30,8 @@ Source Club runs on Google Workspace (confirmed). The right AI platform is **Goo
 
 ### Why Vertex AI for Source Club
 
-**Signal 1 — Google Workspace is already in use (confirmed)**
-Source Club uses Google Docs for SOPs. Vertex AI agents connect directly to Google Docs, Sheets, Drive, and Gmail — no custom connectors needed. Choosing AWS or Azure means building bridges back to Google that don't need to exist.
+**Signal 1 — Google Workspace (assumed — the key thing to confirm)**
+*If* Source Club uses Google Workspace, Vertex AI agents connect directly to Google Docs, Sheets, Drive, and Gmail — no custom connectors needed, and choosing AWS or Azure would mean building bridges back to Google that don't need to exist. This is the load-bearing assumption behind the whole recommendation; it's the first thing I'd verify (see `questions-i-would-ask-first.md`).
 
 **Signal 2 — Small team, lean infrastructure**
 At 7 people, no one has time to manage complex AWS IAM policies or Azure subscription hierarchies. GCP is the most approachable cloud for a small technical team. Vertex AI's UI and docs are cleaner; onboarding is faster.

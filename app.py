@@ -74,8 +74,8 @@ with st.container(border=True):
         st.markdown(
             "Full platform decision (AWS Bedrock vs Azure AI Foundry vs **Google Vertex AI**), "
             "end-state system architecture diagram, phased build plan, tech stack, cost model, "
-            "and Day 1 checklist. Informed by Source Club's confirmed use of Google Workspace, "
-            "ZenOne, Base86, and their existing Stripe + HubSpot stack."
+            "and Day 1 checklist. Built on Stripe + HubSpot (confirmed in the brief) plus stated "
+            "assumptions about Google Workspace, ZenOne, and Base86 — the things I'd confirm first."
         )
         st.page_link("pages/5_🏗️_Architecture_Scope.py", label="View Architecture Scope →")
     with col_b:
@@ -86,22 +86,26 @@ st.divider()
 # ── Approach note ────────────────────────────────────────────────────────────
 with st.expander("📝 Approach & Assumptions"):
     st.markdown("""
-**On the existing stack:** Source Club uses **Base86** (AI product matching) and **ZenOne**
-(procurement, 200K+ normalized SKUs) — confirmed from their SOP documentation.
-The savings analysis POC replicates Base86's core matching logic with open-source tools for this
-demo; the production version integrates directly with ZenOne and Base86.
+**What's confirmed vs. assumed.** The brief confirms only **Stripe** and **HubSpot**. Everything
+else below — Google Workspace, GCP, **ZenOne**, **Base86**, PandaDoc — is my working assumption,
+flagged as such throughout. The full list of what I'd verify is in
+`docs/questions-i-would-ask-first.md`.
 
-**On the AI platform:** Google Vertex AI is recommended. Source Club uses Google Docs (confirmed).
-Vertex AI agents connect natively to Google Workspace — no custom connectors needed. GCP's
-AI Track startup program provides up to $350K in credits vs $150K Azure / $100K AWS.
+**On the existing stack (assumed):** *if* Source Club uses **ZenOne** (procurement catalog) and
+**Base86** (AI product matching), the production version integrates with them directly. The POC
+replicates the core matching logic with open-source tools so it can be evaluated independently.
 
-**On the production vision:** The full automation is a 5-agent Vertex AI pipeline:
-intake form → Base86/ZenOne catalog lookup → savings calculation →
-Google Doc report generation → HubSpot CRM sync. No founder involvement required.
+**On the AI platform (conditional):** Google Vertex AI is recommended *only if* Source Club is on
+Google Workspace — then Vertex connects natively to Docs/Drive/Gmail and GCP's AI Track offers up to
+$350K credits. If they're on Microsoft 365 or cloud-agnostic, the choice flips.
 
-**Assumptions:**
-- Prospect purchase history = CSV/Excel export from dental supplier (Benco, Patterson, Schein)
-- Source Club's catalog lives in ZenOne; static CSV used here as a stand-in for the POC
+**On the AI matching pass:** intentionally optional and OFF by default in the POC — the vendor
+choice (Gemini vs. Claude) depends on the platform, accuracy bar, and real volume, so I deferred it
+rather than bake in a decision I'd have to unwind.
+
+**Assumptions I made (per the brief's "make a call and state it"):**
+- Prospect purchase history = CSV/Excel export from a dental supplier (Benco, Patterson, Schein)
+- A catalog source of truth exists (assumed ZenOne); static CSV used here as a stand-in
 - The Stripe + HubSpot naming mismatch is solved with a one-time reconciliation script
-- Project priorities would be refined with 30 min of conversation about ARR, churn rate, and team bandwidth
+- Project priorities would be refined against the real queue + a short ARR/churn/bandwidth conversation
     """)

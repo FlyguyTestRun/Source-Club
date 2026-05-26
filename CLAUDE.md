@@ -82,22 +82,26 @@ fuzzy-only mode. Sample data yields **~$4,944 savings at a 78.6% match rate** (1
 6 unmatched).
 
 ## Key Architecture Decisions (production vision — see `docs/`)
-- **AI platform:** Google Vertex AI (Source Club runs on Google Workspace; GCP AI Track offers up to
-  $350K credits). This POC uses the Anthropic API directly; production would use Gemini via Vertex.
-- **Matching at scale:** integrate ZenOne (catalog, 200K+ normalized SKUs) + Base86 (AI matching)
-  rather than the static sample CSV used here.
+These are **hypotheses built on assumptions**, not settled facts. See
+`docs/questions-i-would-ask-first.md` for what I'd confirm before committing.
+- **AI platform:** Google Vertex AI — *conditional on Source Club being on Google Workspace*
+  (assumed, not confirmed in the brief). If they're not on Google, this flips to Azure/neutral.
+- **AI matching pass:** intentionally optional and OFF by default in the POC — the vendor choice
+  (Gemini vs. Claude) depends on the platform + accuracy + volume answers, so it's deferred.
+- **Matching at scale:** integrate ZenOne (catalog) + Base86 (AI matching) *if those are in fact
+  their tools* — assumed, would verify — rather than the static sample CSV used here.
 - **CRM/billing sync:** n8n (self-hosted) — Stripe webhooks → HubSpot Company properties.
 
-## Source Club's Tech Stack (confirmed)
-| Tool | Role |
-|------|------|
-| Stripe | Billing / subscriptions |
-| HubSpot | CRM |
-| ZenOne | Procurement — 200K+ normalized dental SKUs |
-| Base86 | AI-driven product matching |
-| Google Workspace | Docs, Drive, Gmail |
-| PandaDoc | Contracts / proposals |
-| n8n | Proposed: Stripe ↔ HubSpot automation |
+## Source Club's Tech Stack
+| Tool | Role | Status |
+|------|------|--------|
+| Stripe | Billing / subscriptions | **Confirmed in brief** |
+| HubSpot | CRM | **Confirmed in brief** |
+| ZenOne | Procurement — assumed catalog source of truth | Assumed — verify |
+| Base86 | AI-driven product matching | Assumed — verify |
+| Google Workspace | Docs, Drive, Gmail | Assumed — verify |
+| PandaDoc | Contracts / proposals | Assumed — verify |
+| n8n | Proposed: Stripe ↔ HubSpot automation | My proposal |
 
 ## Known Limitations / Next Steps
 - Pack-size unit normalization: **done** (per-unit comparison with safe fallback).

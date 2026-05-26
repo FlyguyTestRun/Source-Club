@@ -43,7 +43,7 @@ The brief says *”a rough working thing beats a beautiful description.”* That
 - **Assignments 2 and 3** are concise decision documents — enough to act on, not padded
 - The architecture reflects what I’d actually build, including honest notes on what this POC skips and why
 
-**On the existing stack:** I noted that Source Club already uses **Base86** (AI-driven product matching) and **ZenOne** (procurement platform, 200K+ normalized SKUs). The savings analysis POC replicates Base86’s core matching capability with open-source tools for the purpose of this demo — the production version would integrate with ZenOne and Base86 directly rather than replacing them.
+**On the existing stack (assumed, not confirmed):** the brief confirms only Stripe and HubSpot. I *assumed* Source Club uses **Base86** (AI product matching) and **ZenOne** (procurement catalog) and built around that — but I flag it as an assumption throughout, and verifying it is near the top of `docs/questions-i-would-ask-first.md`. The POC replicates the core matching capability with open-source tools so it stands on its own; *if* those platforms are in play, production integrates with them directly.
 
 **On the production vision:** The full automation is a workflow wrapper: prospect submits purchase history via form → pipeline feeds it into Base86/ZenOne → formatted savings report goes back to the prospect automatically, no founder time required. The three-pass matching pipeline in this POC demonstrates the logic and data flow.
 
