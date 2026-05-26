@@ -8,6 +8,28 @@ The core challenge: dental suppliers use completely inconsistent product naming,
 
 ---
 
+## The process has two parts
+
+The team's own training (the *"Benco Purchase History Manipulation and Savings Analysis"* walkthrough)
+splits this into two distinct phases, and so does this design:
+
+1. **Collecting + cleaning the purchase history** — take the raw supplier export (e.g. a Benco order
+   history) and turn it into a clean, one-row-per-product table: drop header/footer junk and
+   non-product lines (shipping, credits), collapse repeated orders, annualize quantities, and pull
+   pack size / unit out of free-text descriptions.
+2. **Running the savings analysis** — match each cleaned line against Source Club pricing, compute
+   per-unit savings, and route uncertain matches to a human review queue.
+
+**Where this POC is strong vs. light (honest scope):** the working app fully demonstrates **Part 2**
+(matching, per-unit savings math, confidence tiers, review queue) and the *light* end of Part 1
+(column auto-detection across Benco/Patterson/Schein headers, abbreviation expansion, empty-row
+drop). It does **not** yet demonstrate the heavier Part-1 "manipulation" (junk-row stripping,
+multi-line item collapsing, regex pack-size extraction, quantity annualization) because the bundled
+sample is already clean. That cleanup is real work; productionizing it is the top "what's next" item
+below, and I'd shape it directly against a real Benco export.
+
+---
+
 ## Existing Tech Stack Context
 
 > **Assumption, not fact.** The brief confirms only Stripe and HubSpot. The two platforms below are
@@ -145,8 +167,11 @@ $10K–$30K/year member savings range.
 This is a working proof-of-concept. The right direction is clear; it just needs time:
 
 **Immediate (Week 1–2):**
-- Connect to live ZenOne catalog via API instead of static CSV
-- Pull Base86's normalized product data as the matching knowledge base
+- **Purchase-history cleanup (Part 1)** — build the supplier-export "manipulation" step against a
+  real Benco file: strip junk/non-product rows, collapse multi-line items, regex pack size + unit
+  out of free-text descriptions, annualize quantities. This is the half the bundled clean sample
+  doesn't exercise.
+- Connect to a live catalog source (assumed ZenOne) via API instead of a static CSV
 - One-click "approve / correct" flow in the review queue tab
 
 **Done in this POC:**
