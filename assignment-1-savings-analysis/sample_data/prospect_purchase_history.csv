@@ -1,0 +1,29 @@
+supplier_sku,manufacturer_sku,description,quantity_per_year,unit_price,pack_size,unit_of_measure,annual_spend
+P1001,GLV-NIT-MED-100,Nitrile Exam Gloves Medium,24,18.50,100,box,444.00
+P1002,GLV-NIT-SM-100,Nitrile Exam Gloves Small,12,18.50,100,box,222.00
+,GLV-NIT-LG-100,EXAM GLOVES NITRILE LG 100CT,18,19.00,100,box,342.00
+,,Nitrile Gloves XL Box 100,12,19.25,100,box,231.00
+P2001,,Prophy Paste Mint Med Grit 200g,36,14.25,200,gram,513.00
+,,PROPHY PASTE CHERRY COARSE 200G,24,14.50,200,gram,348.00
+,,strawberry prophy paste fine grit,18,14.25,200,gram,256.50
+P3001,COMP-A2-4G,Composite Resin A2 4g Syringe,48,42.00,4,gram,2016.00
+,,COMPOSITE RESIN A3 SHADE 4GM SYR,36,43.50,4,gram,1566.00
+,,composite b2 4g,24,42.75,4,gram,1026.00
+P4001,,Lidocaine 2% w/Epi Carpules 100pk,24,34.00,100,each,816.00
+,,ARTICAINE 4% EPI CARPULES BOX 100,18,38.00,100,each,684.00
+,,Mepivacaine 3% 100ct box,12,33.50,100,each,402.00
+P5001,,Cotton Rolls Medium 2000/bag,12,12.00,2000,each,144.00
+,,Cotton Rolls Large Bag 2000,8,12.75,2000,each,102.00
+P6001,,Self Seal Sterilization Pouches 3.5x5.25 200ct,24,15.50,200,each,372.00
+,,Sterilization Pouches 5x7 200pk,18,18.75,200,each,337.50
+P7001,,3-ply Dental Patient Bibs 500ct,24,24.00,500,each,576.00
+P8001,,Surgical Masks Blue Level 2 ASTM 50ct,48,12.00,50,each,576.00
+,,N95 Respirators 20 count,24,22.50,20,each,540.00
+P9001,,Chromatic Alginate 1lb,24,13.00,1,pound,312.00
+,,Fast Set Alginate Impression Material 454g,18,12.75,454,gram,229.50
+P10001,,Endo Hand Files 21mm Assorted 60 pack,12,32.00,60,each,384.00
+P11001,,Universal Bonding Agent 5mL,24,48.00,5,ml,1152.00
+,,Phosphoric Acid 35% Etch 3mL Syringe,48,7.25,3,ml,348.00
+,,Waxed Floss 200 meters,24,8.50,200,meter,204.00
+,,Topical Anesthetic Benzo 20% Jar 28g,18,16.50,28,gram,297.00
+,,Dental Chair Covers Pack of 50,12,28.00,50,each,336.00
