@@ -61,7 +61,7 @@ PROSPECT ACQUISITION
   └──────────────────────┬──────────────────────────────────┘
                          │ Manual email/upload
                          ▼
-MANUAL PROCESS (TODAY — 5-7 hrs/analysis)
+MANUAL PROCESS (TODAY — ~10 min each, 20-40/mo = 5-7+ hrs/mo)
   ┌─────────────────────────────────────────────────────────┐
   │  Founder                                                │
   │  └── Opens prospect CSV                                 │
@@ -134,7 +134,7 @@ VERTEX AI AGENT PIPELINE (Google Cloud)
   │  └── Logs analysis run to BigQuery                           │
   │                                                              │
   └────────────────────────────┬─────────────────────────────────┘
-                               │ ~5-10 min total (vs 5-7 hrs manual)
+                               │ seconds of compute + brief review (vs ~10 min hands-on each today)
                                ▼
 MEMBER ONBOARDING (AUTOMATED)
   ┌──────────────────────────────────────────────────────────────┐
@@ -161,14 +161,14 @@ MEMBER ONBOARDING (AUTOMATED)
 
 ### Phase 1 — Weeks 1–3: Remove the Bottleneck
 
-**Goal:** Savings analysis goes from 5–7 hours to under 10 minutes.
+**Goal:** Take the founder out of the per-analysis loop — from ~10 min of hands-on work each (5–7+ hrs/month) to near-zero, with only edge cases reviewed.
 
 **What gets built:**
 - Google Form intake (prospect uploads CSV/Excel + fills basic info)
 - Vertex AI matching pipeline (exact SKU → Base86 fuzzy → Gemini Flash semantic)
 - Google Sheets review queue for LOW confidence items
 - Savings report generated from Google Doc template → PDF → emailed automatically
-- Human reviews only the uncertain matches before send (15 min vs 5–7 hrs)
+- Human reviews only the uncertain matches before send — a few minutes, and not necessarily the founder
 
 **Tech used:**
 - Vertex AI (Gemini 2.5 Flash + context caching on ZenOne catalog)

@@ -17,10 +17,10 @@ Projects that score high on all three get done first. Projects that score high o
 ### 🥇 1. Savings Analysis Automation
 
 **Revenue Impact: Critical**
-This is the primary conversion tool. Every new member goes through a savings analysis first. At 5–7 hours per analysis, the founder can only run so many per month — that's a hard ceiling on acquisition velocity. Automating this doesn't just save time, it removes a growth bottleneck entirely.
+This is the primary conversion tool. Every new member goes through a savings analysis first. It's ~10 minutes of founder time per analysis, 20–40 times a month (5–7+ hrs/month) — and, more importantly, it's a *founder-only* step. That makes the founder the hard ceiling on acquisition velocity. Automating it doesn't just reclaim hours, it removes a growth bottleneck entirely.
 
 **Operational Leverage: Highest**
-5–7 hours of skilled founder time → ~15 minutes of review on uncertain matches. That reclaimed time goes directly back into sales conversations and member success.
+5–7+ hours a month of skilled founder time → a few minutes of review on uncertain matches, and the founder is out of the per-analysis loop entirely. That reclaimed time goes directly back into sales conversations and member success — and acquisition is no longer capped by one person's calendar.
 
 **An important nuance on the tech:** Source Club already partners with **Base86** (AI product matching) and **ZenOne** (procurement platform with 200K+ normalized SKUs). These are the right production-scale tools for matching. The automation work here is not rebuilding what Base86 does — it's building the **workflow wrapper** around it: the intake form, the pipeline that feeds prospect data into Base86/ZenOne, and the formatted savings report that comes out the other end. That's a much faster build than it looks on paper.
 

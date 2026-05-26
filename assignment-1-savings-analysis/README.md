@@ -2,7 +2,7 @@
 
 ## The Problem
 
-Generating a savings analysis for a prospect currently takes **5–7 hours of founder time** per analysis. At 20–40 analyses per month, that's a hard cap on how fast Source Club can grow — you can only acquire as many members as there are hours to manually match their purchase history against the catalog.
+Today the founder runs each savings analysis by hand — about **10 minutes per analysis, 20–40 times a month, so 5–7+ hours a month** of repetitive founder time. The cost isn't just the hours: it's a **founder-only bottleneck on the single most important conversion step**, which caps how fast Source Club can acquire members and ties up the person who can least afford the interruption.
 
 The core challenge: dental suppliers use completely inconsistent product naming, SKUs, pack sizes, and units. A product that one supplier calls *"Nitrile Exam Gloves Medium 100/bx"* shows up in another's invoice as *"EXAM GLOVES NITRILE MED 100CT"* — same product, zero overlap in text.
 

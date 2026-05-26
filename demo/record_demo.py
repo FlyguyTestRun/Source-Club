@@ -144,7 +144,7 @@ def run_demo(page, base_url: str, use_ai: bool):
             pass
 
     page.mouse.wheel(0, 600)
-    narrate("Full report downloads as CSV. That's the bottleneck removed: 5–7 hrs → seconds.", hold=3.0)
+    narrate("Full report downloads as CSV. The founder-only bottleneck (5–7+ hrs/month) is removed.", hold=3.0)
     if use_ai:
         narrate("AI pass was ON — Pass 3 resolves ambiguous rows fuzzy matching can't.", hold=2.5)
 
