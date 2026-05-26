@@ -1,0 +1,4 @@
+# Auto-demo recorder dependencies (separate from the app's runtime deps).
+# After installing, fetch the browser binary once:
+#   python -m playwright install chromium
+playwright>=1.44.0
