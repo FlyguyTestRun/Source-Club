@@ -111,15 +111,25 @@ def run_demo(page, base_url: str, use_ai: bool):
     page.wait_for_selector("a[href$='Savings_Analysis']", timeout=30000)
     narrate("Source Club case study — one app, four deliverables. Opening the live tool…")
 
-    page.click("a[href$='Savings_Analysis']")
-    page.wait_for_selector("text=Assignment 1", timeout=30000)
+    # Navigate straight to the Savings Analysis page by URL. This is deterministic
+    # (no dependence on a sidebar click landing mid-rerun). Fall back to the nav
+    # link if the URL slug doesn't resolve, then wait for the page to actually render.
+    lp = page.locator(".st-key-lp button")
+    page.goto(base_url.rstrip("/") + "/Savings_Analysis", wait_until="domcontentloaded")
+    try:
+        lp.wait_for(state="visible", timeout=12000)
+    except Exception:
+        page.click("a[href$='Savings_Analysis']")
+        lp.wait_for(state="visible", timeout=30000)
     narrate("Assignment 1: upload a prospect's purchase history + the Source Club catalog.")
 
     # Load both sample files. A short settle between clicks lets the first
     # Streamlit rerun finish before the second click, avoiding a click/rerun race.
-    page.locator(".st-key-lp button").click()
+    lp.click()
     page.wait_for_timeout(1200)
-    page.locator(".st-key-lc button").click()
+    lc = page.locator(".st-key-lc button")
+    lc.wait_for(state="visible", timeout=20000)
+    lc.click()
     narrate("Sample prospect file + catalog loaded — no API key required for this demo.")
 
     # The Run button only appears once both files are present; wait for it.
