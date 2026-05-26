@@ -1,0 +1,17 @@
+# Render.com deployment blueprint (free tier).
+# Render reads this automatically: New + → "Blueprint" → pick this repo → Apply.
+services:
+  - type: web
+    name: source-club-savings
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run app.py --server.port $PORT --server.address 0.0.0.0 --server.headless true
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      # Optional: enables the Claude AI matching pass. Leave unset for the
+      # deterministic fuzzy-only demo. Set as a *secret* in the Render dashboard,
+      # not here, if you want it.
+      # - key: ANTHROPIC_API_KEY
+      #   sync: false
