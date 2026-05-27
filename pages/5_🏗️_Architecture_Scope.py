@@ -50,7 +50,7 @@ st.divider()
 
 # ── Render the full doc ───────────────────────────────────────────────────────
 doc_path = os.path.join(os.path.dirname(__file__), "..", "docs", "90-day-architecture-scope.md")
-with open(doc_path, "r") as f:
+with open(doc_path, "r", encoding="utf-8") as f:
     content = f.read()
 
 # Strip the H1 (already shown as page title) and first few lines

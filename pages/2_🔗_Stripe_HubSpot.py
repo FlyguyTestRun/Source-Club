@@ -14,7 +14,7 @@ st.caption("Systems architecture: 3 options analyzed, 1 recommended")
 st.divider()
 
 readme_path = os.path.join(os.path.dirname(__file__), "..", "assignment-2-stripe-hubspot", "README.md")
-with open(readme_path, "r") as f:
+with open(readme_path, "r", encoding="utf-8") as f:
     content = f.read()
 
 # Strip the H1 (already in page title) and render

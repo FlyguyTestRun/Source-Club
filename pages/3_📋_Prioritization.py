@@ -14,7 +14,7 @@ st.caption("Framework: Revenue Impact × Operational Leverage × Sequencing Depe
 st.divider()
 
 readme_path = os.path.join(os.path.dirname(__file__), "..", "assignment-3-prioritization", "README.md")
-with open(readme_path, "r") as f:
+with open(readme_path, "r", encoding="utf-8") as f:
     content = f.read()
 
 lines = content.split("\n")
