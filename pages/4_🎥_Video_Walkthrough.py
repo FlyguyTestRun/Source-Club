@@ -15,16 +15,15 @@ st.divider()
 
 LOOM_URL = "https://loom.com/share/PLACEHOLDER"  # ← replace with your Loom URL
 _DEMO_DIR = os.path.join(os.path.dirname(__file__), "..", "demo", "output")
-NARRATED_DEMO = os.path.join(_DEMO_DIR, "source-club-demo-narrated.webm")  # has built-in voiceover
+NARRATED_MP4 = os.path.join(_DEMO_DIR, "source-club-demo-narrated.mp4")     # H.264/AAC, voiceover
+NARRATED_WEBM = os.path.join(_DEMO_DIR, "source-club-demo-narrated.webm")   # VP8/Opus, voiceover
 SILENT_DEMO = os.path.join(_DEMO_DIR, "source-club-demo.webm")             # captions only
 
 # Auto-generated product demo — the app driving itself end to end. Prefer the
-# narrated version (built-in voiceover via demo/record_narrated.py); fall back
-# to the silent captioned run (demo/record_demo.py).
-_demo = NARRATED_DEMO if os.path.exists(NARRATED_DEMO) else (
-    SILENT_DEMO if os.path.exists(SILENT_DEMO) else None)
+# narrated MP4 (most compatible), then narrated WebM, then the silent run.
+_demo = next((f for f in (NARRATED_MP4, NARRATED_WEBM, SILENT_DEMO) if os.path.exists(f)), None)
 if _demo:
-    narrated = _demo == NARRATED_DEMO
+    narrated = _demo in (NARRATED_MP4, NARRATED_WEBM)
     st.subheader("▶️ Auto-generated product demo" + (" (with voiceover)" if narrated else ""))
     st.caption(("Self-narrating run of the Savings Analyzer — turn sound on."
                 if narrated else

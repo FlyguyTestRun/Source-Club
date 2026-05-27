@@ -32,6 +32,7 @@ ROOT = os.path.dirname(HERE)
 OUT = os.path.join(HERE, "output")
 AUDIO = os.path.join(OUT, "audio")
 FINAL = os.path.join(OUT, "source-club-demo-narrated.webm")
+FINAL_MP4 = os.path.join(OUT, "source-club-demo-narrated.mp4")  # H.264/AAC — plays inline on GitHub
 PORT = 8540
 URL = f"http://localhost:{PORT}/"
 
@@ -192,6 +193,15 @@ def mux(video, narr_wav, out, duration):
                    check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
+def to_mp4(webm, mp4):
+    """H.264/AAC copy for universal playback (GitHub inline, email, any device)."""
+    ff = _ffmpeg()
+    subprocess.run([ff, "-y", "-i", webm,
+                    "-c:v", "libx264", "-pix_fmt", "yuv420p", "-profile:v", "high", "-crf", "23",
+                    "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", mp4],
+                   check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--engine", choices=["edge", "sapi"], default="edge",
@@ -227,6 +237,8 @@ def main():
     dur = assemble_audio(clips, offsets, narr)
     print("Muxing audio into video…")
     mux(video, narr, FINAL, dur)
+    print("Encoding MP4 (H.264/AAC) for universal playback…")
+    to_mp4(FINAL, FINAL_MP4)
     try:
         os.remove(video)
     except OSError:
@@ -237,7 +249,7 @@ def main():
         except OSError: pass
     try: os.rmdir(AUDIO)
     except OSError: pass
-    print(f"\n🎬 Narrated demo saved: {FINAL}  (voice: {args.voice if engine=='edge' else 'SAPI'})")
+    print(f"\n🎬 Narrated demo saved:\n  {FINAL}\n  {FINAL_MP4}  (voice: {args.voice if engine=='edge' else 'SAPI'})")
 
 
 if __name__ == "__main__":

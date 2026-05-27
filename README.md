@@ -40,12 +40,20 @@ No live URL needed to evaluate — the brief asks for "links or files," and this
 are the working thing. Optional one-click hosting (Render / Hugging Face) is in
 [`docs/DEPLOY.md`](./docs/DEPLOY.md).
 
-## Watch the demo (Assignment 4)
+## Watch the demo (Assignment 4) — with audio
 
 A finished, **self-narrating** walkthrough of the live tool (natural neural voiceover, no recording
-required): [`demo/output/source-club-demo-narrated.webm`](./demo/output/source-club-demo-narrated.webm).
-It plays automatically on the in-app **🎥 Video Walkthrough** page. Rebuild or re-voice it with
-[`demo/record_narrated.py`](./demo/record_narrated.py); narrate it yourself with
+required). Three ways to play it, all with sound:
+
+- **On GitHub (no install):** open
+  [`demo/output/source-club-demo-narrated.mp4`](./demo/output/source-club-demo-narrated.mp4) →
+  GitHub plays the MP4 inline in the file view. Press play, sound on.
+- **Locally (file):** open `demo/output/source-club-demo-narrated.mp4` in any browser/player, or the
+  `.webm` version.
+- **Locally (in the app):** `streamlit run app.py` → **🎥 Video Walkthrough** page → press play.
+
+Rebuild or re-voice it with [`demo/record_narrated.py`](./demo/record_narrated.py) (outputs both
+`.mp4` and `.webm`); narrate it in your own voice with
 [`demo/voiceover-script.md`](./demo/voiceover-script.md).
 
 ---
