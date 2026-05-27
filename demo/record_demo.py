@@ -32,7 +32,7 @@ USAGE
 VOICEOVER WORKFLOW
   Run `python demo/record_demo.py --voiceover` and read demo/voiceover-script.md aloud as the
   browser drives itself. The captions are hidden so your narration carries the story. The pacing is
-  tuned (~1.7x holds) to give you time to speak each line.
+  tuned (~2.2x holds) to give you time to speak each line; use --hold-scale to go slower/faster.
 
 The deterministic demo runs in fuzzy-only mode (no API key needed) and always
 produces the same $4,944 / 78.6% result. --use-ai additionally exercises Pass 3.
@@ -184,7 +184,7 @@ def main():
     args = ap.parse_args()
 
     captions = not args.voiceover
-    hold_scale = args.hold_scale if args.hold_scale is not None else (1.7 if args.voiceover else 1.0)
+    hold_scale = args.hold_scale if args.hold_scale is not None else (2.2 if args.voiceover else 1.0)
     if args.voiceover and args.slow_mo == 350:
         args.slow_mo = 550  # smoother visuals for narration unless overridden
 
