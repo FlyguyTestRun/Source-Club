@@ -14,14 +14,22 @@ st.caption("3–5 minute walkthrough covering all three assignments")
 st.divider()
 
 LOOM_URL = "https://loom.com/share/PLACEHOLDER"  # ← replace with your Loom URL
-LOCAL_DEMO = os.path.join(os.path.dirname(__file__), "..", "demo", "output", "source-club-demo.webm")
+_DEMO_DIR = os.path.join(os.path.dirname(__file__), "..", "demo", "output")
+NARRATED_DEMO = os.path.join(_DEMO_DIR, "source-club-demo-narrated.webm")  # has built-in voiceover
+SILENT_DEMO = os.path.join(_DEMO_DIR, "source-club-demo.webm")             # captions only
 
-# Auto-generated product demo (recorded by demo/record_demo.py) — shows the live
-# tool driving itself end to end. Plays inline if the recording exists.
-if os.path.exists(LOCAL_DEMO):
-    st.subheader("▶️ Auto-generated product demo")
-    st.caption("Hands-free run of the Savings Analyzer, recorded by `demo/record_demo.py`.")
-    st.video(LOCAL_DEMO)
+# Auto-generated product demo — the app driving itself end to end. Prefer the
+# narrated version (built-in voiceover via demo/record_narrated.py); fall back
+# to the silent captioned run (demo/record_demo.py).
+_demo = NARRATED_DEMO if os.path.exists(NARRATED_DEMO) else (
+    SILENT_DEMO if os.path.exists(SILENT_DEMO) else None)
+if _demo:
+    narrated = _demo == NARRATED_DEMO
+    st.subheader("▶️ Auto-generated product demo" + (" (with voiceover)" if narrated else ""))
+    st.caption(("Self-narrating run of the Savings Analyzer — turn sound on."
+                if narrated else
+                "Hands-free run of the Savings Analyzer (silent; captions on screen)."))
+    st.video(_demo)
     st.divider()
 
 st.subheader("🎙️ Narrated Loom walkthrough")

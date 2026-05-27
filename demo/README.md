@@ -17,6 +17,18 @@ pip install -r demo/requirements.txt
 python -m playwright install chromium
 ```
 
+## Self-narrating demo (no human voice needed)
+`record_narrated.py` builds a finished video **with a built-in voiceover** — it synthesizes concise
+narration with offline TTS (Windows SAPI), times each on-screen step to its line, and muxes the audio
+into the video with the bundled ffmpeg:
+```bash
+python demo/record_narrated.py            # → demo/output/source-club-demo-narrated.webm
+python demo/record_narrated.py --rate -2  # slower, clearer voice
+```
+The Video Walkthrough page plays this narrated version automatically when it exists (it falls back to
+the silent captioned run below otherwise). To narrate in **your own** voice instead, use the
+voiceover workflow below.
+
 ## Run it
 ```bash
 # from the repo root
