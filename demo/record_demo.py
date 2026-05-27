@@ -21,11 +21,18 @@ for dropping straight into the Assignment 4 video page.
 USAGE
   pip install -r demo/requirements.txt
   python -m playwright install chromium
-  python demo/record_demo.py                 # auto-starts app, headed, records
+  python demo/record_demo.py                 # auto-starts app, headed, records (with captions)
+  python demo/record_demo.py --voiceover     # clean run to narrate over (captions off, slow pace)
   python demo/record_demo.py --headless      # no visible window (CI / fast)
   python demo/record_demo.py --no-record      # just watch, don't save a video
   python demo/record_demo.py --no-start-server  # attach to an app you already run
   python demo/record_demo.py --use-ai         # turn on the Claude pass (needs .env key)
+  python demo/record_demo.py --hold-scale 2   # slow every pause down 2x
+
+VOICEOVER WORKFLOW
+  Run `python demo/record_demo.py --voiceover` and read demo/voiceover-script.md aloud as the
+  browser drives itself. The captions are hidden so your narration carries the story. The pacing is
+  tuned (~1.7x holds) to give you time to speak each line.
 
 The deterministic demo runs in fuzzy-only mode (no API key needed) and always
 produces the same $4,944 / 78.6% result. --use-ai additionally exercises Pass 3.
@@ -96,16 +103,17 @@ _BANNER_JS = """
 """
 
 
-def make_narrator(page):
+def make_narrator(page, captions: bool = True, hold_scale: float = 1.0):
     def narrate(text: str, hold: float = 2.4):
-        page.evaluate(_BANNER_JS, text)
+        if captions:
+            page.evaluate(_BANNER_JS, text)
         print(f"  • {text}")
-        page.wait_for_timeout(int(hold * 1000))
+        page.wait_for_timeout(int(hold * hold_scale * 1000))
     return narrate
 
 
-def run_demo(page, base_url: str, use_ai: bool):
-    narrate = make_narrator(page)
+def run_demo(page, base_url: str, use_ai: bool, *, captions: bool = True, hold_scale: float = 1.0):
+    narrate = make_narrator(page, captions=captions, hold_scale=hold_scale)
 
     page.goto(base_url, wait_until="domcontentloaded")
     page.wait_for_selector("a[href$='Savings_Analysis']", timeout=30000)
@@ -168,7 +176,17 @@ def main():
                     help="attach to an already-running app instead of launching one")
     ap.add_argument("--use-ai", action="store_true", help="enable the Claude AI pass (needs ANTHROPIC_API_KEY)")
     ap.add_argument("--slow-mo", type=int, default=350, help="ms delay between actions (watchable pacing)")
+    ap.add_argument("--voiceover", action="store_true",
+                    help="record a clean run for narrating over: hides the on-screen captions and "
+                         "slows pacing so you can read demo/voiceover-script.md aloud")
+    ap.add_argument("--hold-scale", type=float, default=None,
+                    help="multiply every step's pause (e.g. 1.6 = slower). Defaults to 1.0, or 1.7 with --voiceover")
     args = ap.parse_args()
+
+    captions = not args.voiceover
+    hold_scale = args.hold_scale if args.hold_scale is not None else (1.7 if args.voiceover else 1.0)
+    if args.voiceover and args.slow_mo == 350:
+        args.slow_mo = 550  # smoother visuals for narration unless overridden
 
     try:
         from playwright.sync_api import sync_playwright
@@ -199,7 +217,7 @@ def main():
 
         ok = True
         try:
-            run_demo(page, base_url, args.use_ai)
+            run_demo(page, base_url, args.use_ai, captions=captions, hold_scale=hold_scale)
         except Exception as e:
             ok = False
             print(f"\n⚠️  Demo step failed: {e}")
