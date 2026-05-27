@@ -17,6 +17,12 @@ multi-page web app plus supporting decision documents.
 
 For a reviewer-facing "how to run and what to look at" walkthrough, see `INTERVIEWER_GUIDE.md`.
 
+> **Source of truth:** `docs/CASE-STUDY-BRIEF.md` holds the verbatim case-study brief + resources +
+> the real project queue. It is authoritative — when anything here disagrees with it, the brief wins.
+> Key reminders from it: the brief is **tool-agnostic** (Streamlit is our choice, not required; a
+> hosted URL is optional — "links or files" suffices); only **Stripe + HubSpot** are confirmed
+> (everything else is an assumption); savings analysis is **~10 min/analysis, 5–7+ hrs/month**.
+
 ## How to Run
 ```bash
 pip install -r requirements.txt
