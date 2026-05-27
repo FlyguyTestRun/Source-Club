@@ -1,0 +1,46 @@
+name: Docker build & smoke test
+
+# Proves the app builds into a container and actually serves — no secrets needed.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t source-club:ci .
+
+      - name: Run container
+        run: docker run -d --name sc -p 8501:8501 source-club:ci
+
+      - name: Wait for the app to become healthy
+        run: |
+          for i in $(seq 1 40); do
+            if curl -fsS http://localhost:8501/_stcore/health >/dev/null 2>&1; then
+              echo "✅ /_stcore/health OK after ${i} tries"; exit 0
+            fi
+            sleep 3
+          done
+          echo "❌ app did not become healthy"; docker logs sc; exit 1
+
+      - name: Smoke-check the landing page serves
+        run: |
+          code=$(curl -fsS -o /dev/null -w "%{http_code}" http://localhost:8501/)
+          echo "landing page HTTP $code"
+          test "$code" = "200"
+
+      - name: Container logs (always)
+        if: always()
+        run: docker logs sc || true
+
+      - name: Tear down
+        if: always()
+        run: docker rm -f sc || true
