@@ -36,16 +36,23 @@ FINAL_MP4 = os.path.join(OUT, "source-club-demo-narrated.mp4")  # H.264/AAC — 
 PORT = 8540
 URL = f"http://localhost:{PORT}/"
 
-# Each beat: (action_key, concise narration). Business-case-first.
+# Each beat: (action_key, concise narration). Covers Assignments 1, 2 and 3.
 BEATS = [
-    ("landing",  "Source Club's biggest bottleneck is the savings analysis. Every prospect needs one before they sign, and today the founder does each one by hand."),
-    ("page",     "It's about ten minutes each, twenty to forty times a month. And it's founder-only, so it caps how fast we can grow. This tool removes that cap."),
+    # ── Assignment 1 — Savings Analysis ──────────────────────────────────────
+    ("landing",  "Hi — this is my Source Club case study. I built a working tool for Assignment one and decision docs for two and three. Let me walk you through them."),
+    ("page",     "Assignment one — the savings analysis. It's the biggest bottleneck: about ten minutes each, twenty to forty times a month, and it's founder-only, so it caps how fast we can grow. This tool removes that cap."),
     ("samples",  "I upload the prospect's purchase history and our pricing catalog. No API key needed; it's fully deterministic."),
     ("run",      "Matching is the hard part, because suppliers name the same product differently. Three passes: exact SKU, fuzzy text, then optional AI."),
     ("results",  "In seconds: about forty-nine hundred dollars in savings, a seventy-eight percent match rate, and nineteen high-confidence matches. Prices compare per unit, so pack sizes don't skew it."),
     ("review",   "Anything the software isn't sure about drops into a human review queue. It's never auto-trusted."),
-    ("unmatched","Items we don't carry are surfaced separately, never force-matched."),
-    ("close",    "One deliberate call: I left the AI vendor open, because it depends on the cloud platform. The goal is simple — take the founder out of this repeatable step entirely."),
+    ("unmatched","Items we don't carry are surfaced separately, never force-matched. That's Assignment one."),
+    # ── Assignment 2 — Stripe x HubSpot ──────────────────────────────────────
+    ("a2_intro", "Assignment two: connecting Stripe and HubSpot. Stripe is billing truth, HubSpot is the CRM, and today they don't talk — so nobody can see billing health on a company without cross-referencing by hand."),
+    ("a2_reco",  "I mapped three options — a native integration, a middleware tool, and a custom build — and I recommend n8n: free, self-hosted, and flexible enough to handle multi-location companies, where one company has several Stripe subscriptions."),
+    # ── Assignment 3 — Prioritization ────────────────────────────────────────
+    ("a3_intro", "Assignment three: prioritizing your real project queue. The question is what to tackle in the first ninety days."),
+    ("a3_rank",  "First, automate the savings analysis — highest priority and the founder bottleneck. Then the Stripe-HubSpot name matching, which is foundational for every dashboard. Then customer service into HubSpot, the ZenOne data backbone, and finishing the sales-pipeline automation."),
+    ("close",    "The thread across all three: take the founder out of the repeatable revenue paths, then build the data layer that turns everything after it into leverage. Thanks for watching."),
 ]
 
 
@@ -159,13 +166,37 @@ def run_and_record(clips):
         page.get_by_role("tab", name="Unmatched").click(); page.wait_for_timeout(500)
         beat(6)
 
-        page.get_by_role("tab", name="All Results").click(); page.wait_for_timeout(500)
+        # ── Assignment 2 — Stripe x HubSpot ──────────────────────────────────
+        page.goto(URL + "Stripe_HubSpot", wait_until="domcontentloaded")
+        _wait_text(page, "Three Options", "Stripe")
         beat(7)
+        page.mouse.wheel(0, 750); page.wait_for_timeout(500)
+        beat(8)
+
+        # ── Assignment 3 — Prioritization ────────────────────────────────────
+        page.goto(URL + "Prioritization", wait_until="domcontentloaded")
+        _wait_text(page, "First 90 days", "Framework")
+        beat(9)
+        page.mouse.wheel(0, 700); page.wait_for_timeout(500)
+        beat(10)
+        page.mouse.wheel(0, 700); page.wait_for_timeout(500)
+        beat(11)
 
         page.wait_for_timeout(800)
         video_path = page.video.path()
         ctx.close(); browser.close()
     return video_path, offsets
+
+
+def _wait_text(page, *phrases):
+    """Wait until any of the phrases is visible (doc page rendered); fall back to a short wait."""
+    for ph in phrases:
+        try:
+            page.get_by_text(ph, exact=False).first.wait_for(state="visible", timeout=8000)
+            return
+        except Exception:
+            continue
+    page.wait_for_timeout(2500)
 
 
 def assemble_audio(clips, offsets, out_wav):

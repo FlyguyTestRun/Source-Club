@@ -24,8 +24,9 @@ SILENT_DEMO = os.path.join(_DEMO_DIR, "source-club-demo.webm")             # cap
 _demo = next((f for f in (NARRATED_MP4, NARRATED_WEBM, SILENT_DEMO) if os.path.exists(f)), None)
 if _demo:
     narrated = _demo in (NARRATED_MP4, NARRATED_WEBM)
-    st.subheader("▶️ Auto-generated product demo" + (" (with voiceover)" if narrated else ""))
-    st.caption(("Self-narrating run of the Savings Analyzer — turn sound on."
+    st.subheader("▶️ Auto-generated walkthrough" + (" (with voiceover)" if narrated else ""))
+    st.caption(("Self-narrating walkthrough of Assignments 1–3 (savings tool, Stripe×HubSpot, "
+                "prioritization) — turn sound on."
                 if narrated else
                 "Hands-free run of the Savings Analyzer (silent; captions on screen)."))
     st.video(_demo)

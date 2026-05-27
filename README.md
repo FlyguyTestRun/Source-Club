@@ -42,8 +42,9 @@ are the working thing. Optional one-click hosting (Render / Hugging Face) is in
 
 ## Watch the demo (Assignment 4) — with audio
 
-A finished, **self-narrating** walkthrough of the live tool (natural neural voiceover, no recording
-required). Three ways to play it, all with sound:
+A finished, **self-narrating** walkthrough covering **all three assignments** — the live savings
+tool (1), the Stripe×HubSpot recommendation (2), and the prioritization (3) — with a natural neural
+voiceover, ~3 min, no recording required. Three ways to play it, all with sound:
 
 - **On GitHub (no install):** open
   [`demo/output/source-club-demo-narrated.mp4`](./demo/output/source-club-demo-narrated.mp4) →
