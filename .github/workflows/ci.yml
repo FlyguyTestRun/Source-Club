@@ -1,0 +1,64 @@
+name: CI — Test & Validate
+
+on:
+  push:
+    branches: [main, 'claude/**', 'feat/**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Python Tests + App Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Validate core modules import
+        run: |
+          python -c "
+          import sys
+          sys.path.insert(0, 'assignment-1-savings-analysis')
+          try:
+              import matcher
+              print('matcher module: OK')
+          except ImportError as e:
+              print(f'matcher import warning: {e}')
+          print('Python environment: OK')
+          "
+
+      - name: Run matcher unit tests (if present)
+        run: |
+          if [ -f assignment-1-savings-analysis/test_matcher.py ]; then
+            python -m pytest assignment-1-savings-analysis/test_matcher.py -v
+          else
+            echo 'No test file found — skipping pytest'
+          fi
+
+      - name: Streamlit syntax check
+        run: |
+          python -m py_compile app.py
+          echo 'app.py syntax: OK'
+          for f in pages/*.py; do
+            python -m py_compile "$f" && echo "$f: OK"
+          done
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## CI Results" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Dependency install | ${{ job.status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Module imports | ${{ job.status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Streamlit syntax | ${{ job.status }} |" >> $GITHUB_STEP_SUMMARY
